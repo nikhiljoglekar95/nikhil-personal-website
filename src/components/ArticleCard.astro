@@ -1,0 +1,11 @@
+---
+const { article, index = 0 } = Astro.props;
+const styles = ['pattern-privacy','pattern-ai','pattern-practice'];
+const style = article.data.category === 'AI Governance' ? styles[1] : article.data.category === 'Privacy in Practice' ? styles[2] : styles[0];
+---
+<a class="article-card" href={`/insights/${article.id}/`}>
+  <div class:list={['article-art',style]} aria-hidden="true"><span class="art-orbit"></span><span class="art-lines"></span><span class="art-number">0{index+1}</span></div>
+  <div class="article-meta"><span>{article.data.category}</span><span>{article.data.readingTime}</span></div>
+  <h3>{article.data.title}</h3><p>{article.data.description}</p>
+  <span class="article-link">Read article <span aria-hidden="true">↗</span></span>
+</a>

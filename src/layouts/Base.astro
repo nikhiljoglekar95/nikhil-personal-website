@@ -1,0 +1,52 @@
+---
+import { site } from '../config/site.js';
+import '../styles/global.css';
+const { title, description = site.description, active = '', image = '/social-card.svg' } = Astro.props;
+const pageTitle = title ? `${title} | ${site.name}` : `${site.name} — Privacy, AI Governance & Digital Trust`;
+const canonical = new URL(Astro.url.pathname, site.url);
+const ogImage = new URL(image, site.url);
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#202f3b" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={description}/>
+  <link rel="canonical" href={canonical.toString()}/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content={pageTitle}/>
+  <meta property="og:description" content={description}/>
+  <meta property="og:image" content={ogImage.toString()}/>
+  <meta property="og:url" content={canonical.toString()}/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet" />
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="nav-wrap container">
+    <a class="wordmark" href="/" aria-label="Nikhil Joglekar home"><span class="monogram">NJ<span class="dot">.</span></span><span class="wordmark-name">Nikhil Joglekar<small>PRIVACY · AI · DIGITAL TRUST</small></span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    <nav id="site-nav" class="nav-links" aria-label="Main navigation">
+      <a href="/" class:list={[{'is-active': active === 'home'}]}>Home</a>
+      <a href="/about" class:list={[{'is-active': active === 'about'}]}>About</a>
+      <a href="/insights" class:list={[{'is-active': active === 'insights'}]}>Insights</a>
+      <a href="/resources" class:list={[{'is-active': active === 'resources'}]}>Resources</a>
+      <a href="/contact" class:list={[{'is-active': active === 'contact'}, 'nav-contact']}>Let's connect <span aria-hidden="true">↗</span></a>
+    </nav>
+  </div>
+</header>
+<main id="main"><slot /></main>
+<footer class="footer"><div class="container footer-top"><div><a class="footer-brand" href="/">Nikhil Joglekar<span>.</span></a><p>Thoughtful perspectives on privacy, AI governance<br/>and the changing rules of digital trust.</p></div><div class="footer-links"><a href="/about">About</a><a href="/insights">Insights</a><a href="/resources">Resources</a><a href="/contact">Contact</a></div></div><div class="container footer-bottom"><span>© {new Date().getFullYear()} Nikhil Joglekar. All rights reserved.</span><span>Personal perspectives. Not legal advice.</span></div></footer>
+<script is:inline>
+  const toggle = document.querySelector('.nav-toggle');
+  const nav = document.querySelector('#site-nav');
+  toggle?.addEventListener('click', () => { const isOpen = toggle.getAttribute('aria-expanded') === 'true'; toggle.setAttribute('aria-expanded', String(!isOpen)); nav.classList.toggle('open', !isOpen); });
+  nav?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { nav.classList.remove('open'); toggle?.setAttribute('aria-expanded', 'false'); }));
+</script>
+</body></html>

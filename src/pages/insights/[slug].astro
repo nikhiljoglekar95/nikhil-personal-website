@@ -1,0 +1,9 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+export async function getStaticPaths(){ const entries = await getCollection('insights', ({data})=>!data.draft); return entries.map(entry=>({params:{slug:entry.id},props:{entry}})); }
+const {entry}=Astro.props;
+const {Content}=await render(entry);
+const date=entry.data.date.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+---
+<Base title={entry.data.title} active="insights" description={entry.data.description}><article><header class="article-head container"><a href="/insights" class="back-link">← All insights</a><div class="article-meta"><span>{entry.data.category}</span><span>{entry.data.readingTime}</span><span>{date}</span></div><h1>{entry.data.title}</h1><p>{entry.data.description}</p><div class="article-byline">By Nikhil Joglekar <span>·</span> Personal perspective</div></header><div class="container page-rule"></div><div class="article-content prose"><Content /></div><div class="container article-end"><p>This article expresses personal views for general information and is not legal advice. Consult official sources and qualified advisers for specific issues.</p><a class="text-link" href="/insights">← Explore more insights</a></div></article></Base>
